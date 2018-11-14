@@ -1,67 +1,73 @@
 # Elro
 
-# Description
+## Description
 
-You can use this Plugin to control elro (or elro-based) remote-control-switches (rc-switches). If the backend-server uses the same command-syntax as the rc_switch_server project, you can even control non-elro rc-switches too! (Or everything other that can be switched on and off)
+You can use this Plugin to control elro (or elro-based) remote-control-switches (rc-switches).
+If the backend-server uses the same command-syntax as the rc_switch_server project,
+you can even control non-elro rc-switches too! (Or everything other that can be switched on and off)
 
 For rc_switch_server command-syntax look at https://github.com/Brootux/rc_switch_server.py (Server-Clients)
 
-# Requirements
+## Requirements
 
   * Installed and running rc_switch_server (https://github.com/Brootux/rc_switch_server.py)
 
-# Configuration
-## plugin.conf
+## Configuration
 
-You have to just simply copy the following into your plugin.conf file. The ip-address/hostname of the rc_switch_server has to be setup later in the items.conf!
+### plugin.yaml
 
-<pre>
-[elro]
-    class_name = Elro
-    class_path = plugins.elro
-</pre>
+You have to just simply copy the following into your plugin.yaml file. The ip-address/hostname of the rc_switch_server has to be setup later in the items.yaml!
 
-## items.conf
+```yaml
+elro:
+    class_name: Elro
+    class_path: plugins.elro
+```
+
+### items.yaml
 
 The most item-fields of this plugin are mandatory. So you should always use all of the fields showed in the following example.
 
-### Example
+#### Example
 
-<pre>
-# items/rc_switches.conf
-[RCS]
-	type = str
-	elro_host = localhost
-	elro_port = 6700
-    [[A]]
-        type = bool
-        elro_system_code = 0.0.0.0.1
-        elro_unit_code = 1
-        elro_send = value
-        enforce_updates = yes
-        visu_acl = rw
-    [[B]]
-        type = bool
-        elro_system_code = 0.0.0.0.1
-        elro_unit_code = 2
-        elro_send = value
-        enforce_updates = yes
-        visu_acl = rw
-    [[C]]
-        type = bool
-        elro_system_code = 0.0.0.0.1
-        elro_unit_code = 4
-        elro_send = value
-        enforce_updates = yes
-        visu_acl = rw
-    [[D]]
-        type = bool
-        elro_system_code = 0.0.0.0.1
-        elro_unit_code = 8
-        elro_send = value
-        enforce_updates = yes
-        visu_acl = rw
-</pre>
+```yaml
+RCS:
+    type: str
+    elro_host: localhost
+    elro_port: 6700
+
+    A:
+        type: bool
+        elro_system_code: 0.0.0.0.1
+        elro_unit_code: 1
+        elro_send: value
+        enforce_updates: 'yes'
+        visu_acl: rw
+
+    B:
+        type: bool
+        elro_system_code: 0.0.0.0.1
+        elro_unit_code: 2
+        elro_send: value
+        enforce_updates: 'yes'
+        visu_acl: rw
+
+    C:
+        type: bool
+        elro_system_code: 0.0.0.0.1
+        elro_unit_code: 4
+        elro_send: value
+        enforce_updates: 'yes'
+        visu_acl: rw
+
+    D:
+        type: bool
+        elro_system_code: 0.0.0.0.1
+        elro_unit_code: 8
+        elro_send: value
+        enforce_updates: 'yes'
+        visu_acl: rw
+```
 
 Description of the attributes:
 
@@ -79,39 +85,35 @@ Hints:
 
 ### Example for multiple rc_switch_server´s
 
-<pre>
-# items/rc_switches.conf
-[RCS-1]
-	type = str
-	elro_host = localhost
-	elro_port = 6700
-    [[A]]
-        type = bool
-        elro_system_code = 0.0.0.0.1
-        elro_unit_code = 1
-        elro_send = value
-        enforce_updates = yes
-        visu_acl = rw
-    ...
-    
-[RCS-2]
-	type = str
-	elro_host = 192.168.0.100
-	elro_port = 6666
-    [[A]]
-        type = bool
-        elro_system_code = 0.0.0.0.2
-        elro_unit_code = 1
-        elro_send = value
-        enforce_updates = yes
-        visu_acl = rw
-    ...
-</pre>
+```yaml
+RCS1:
+  type: str
+  elro_host: localhost
+  elro_port: 6700
+  A:
+    type: bool
+    elro_system_code: '0.0.0.0.1'
+    elro_unit_code: 1
+    elro_send: value
+    enforce_updates: yes
+    visu_acl: rw
 
-## SmartVisu
+RCS2:
+  type: str
+  elro_host: 192.168.0.100
+  elro_port: 6666
+  A:
+    type: bool
+    elro_system_code: '0.0.0.0.2'
+    elro_unit_code: 1
+    elro_send: value
+    enforce_updates: yes
+    visu_acl: rw
+```
+
+### SmartVisu
 
 I suggest you to use the following setup per rc-switch:
-
 
 ```html
 <span data-role="controlgroup" data-type="horizontal">

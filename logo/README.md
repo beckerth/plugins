@@ -1,6 +1,6 @@
 # logo
 
-# Requirements
+## Requirements
 Siemens LOGO PLC
 
 libnodave - a free library to communicate to Siemens S7 PLCs
@@ -22,32 +22,30 @@ The version is not tested with new multi-instance functionality of SmartHomeNG.
 Siemens LOGO version 0BA7
 Siemens LOGO version 0BA8
 
-# Configuration
+## Configuration
 
-## plugin.conf
+### plugin.yaml
 
-Please provide a plugin.conf snippet for your plugin with ever option your plugin supports. Optional attributes should be commented out.
+Sample configuration file for two instances of the logo plugin.
 
-<pre>
-[logo1]
-    class_name = LOGO
-    class_path = plugins.logo
-    host = 10.10.10.99
-    instance = logo1
-    #port = 102 
-    #io_wait=5 
-    #version = 0BA8 
-    
-[logo2]
-    class_name = LOGO
-    class_path = plugins.logo
-    host = 10.10.10.100
-    version = 0BA8 
-    instance = logo2
-    #port = 102 
-    #io_wait=5 
-
-</pre>
+```yaml
+logo1:
+    class_name: LOGO
+    class_path: plugins.logo
+    host: 10.10.10.99
+    instance: logo1
+    # port: 102
+    # io_wait: 5
+    # version: 0BA8
+logo2:
+    class_name: LOGO
+    class_path: plugins.logo
+    host: 10.10.10.100
+    version: 0BA8
+    instance: logo2
+    # port: 102
+    # io_wait: 5
+```
 
 This plugin needs an host attribute and you could specify a port attribute
 
@@ -57,16 +55,13 @@ This plugin needs an host attribute and you could specify a port attribute
 
 * 'version' = Siemens Hardware Version. Default 0BA7
 
+### items.yaml
 
-
-items.conf
---------------
-
-### logo_read@logo1
+#### logo_read@logo1
 Input, Output, Mark to read from Siemens Logo
 @logo1 instancename
 
-### logo_write@logo1
+#### logo_write@logo1
 Input, Output, Mark to write to Siemens Logo
 @logo1 instancename
 
@@ -84,29 +79,30 @@ Input, Output, Mark to write to Siemens Logo
 * 'VMx.x' VM-Bit to read/write VM0.0, VM0.7, VM3.4,.. VM850.7
 * 'VMW' VM-Word to read/write VMW0, VM2, VMW4,.. VM849
 
-<pre>
-# items/my.conf
-[myroom]
-    [[status_I1]]
-        typ = bool
-        logo_read@logo1 = I1    # read the Input I1 from Logo-Instance 'logo1'
-    [[status_I1]]
-        typ = bool
-        logo_read@logo2 = I1    # read the Input I1 from Logo-Instance 'logo2'
-    [[lightM1]]
-        typ = bool
-        knx_dpt = 1
-        knx_listen = 1/1/3
-        knx_init = 1/1/3
-        logo_write@logo1 = M4   # write the Mark M4 to Logo-Instance 'logo1'
-    [[temp_measure]]
-        typ = num
-        eval = value/10
-        visu = yes
-        sqlite = yes
-        logo_read@logo1 = AI1   # read the Analog Input AI1 from Logo-Instance 'logo1'
-    [[temp_set]]
-        typ = num
-        visu = yes
-        logo_write@logo1 = VMW4 # write the VM-Word VM4 to Logo-Instance 'logo1'
-</pre>
+```yaml
+myroom:
+
+    status_I1:
+        typ: bool
+        logo_read@logo1: "I1    ## read the Input I1 from Logo-Instance 'logo1'"
+        logo_read@logo2: "I1    ## read the Input I1 from Logo-Instance 'logo2'"
+
+    lightM1:
+        typ: bool
+        knx_dpt: 1
+        knx_listen: 1/1/3
+        knx_init: 1/1/3
+        logo_write@logo1: "M4    ## write the Mark M4 to Logo-Instance 'logo1'"
+
+    temp_measure:
+        typ: num
+        eval: value/10
+        visu: 'yes'
+        sqlite: 'yes'
+        logo_read@logo1: "AI1    ## read the Analog Input AI1 from Logo-Instance 'logo1'"
+
+    temp_set:
+        typ: num
+        visu: 'yes'
+        logo_write@logo1: "VMW4    ## write the VM-Word VM4 to Logo-Instance 'logo1'"
+```

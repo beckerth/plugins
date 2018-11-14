@@ -24,6 +24,7 @@ import datetime
 import functools
 import time
 import threading
+import sqlite3
 from lib.model.smartplugin import SmartPlugin
 
 
@@ -59,7 +60,6 @@ class SQL(SmartPlugin):
         self._dump_cycle = int(cycle)
         self._buffer = {}
         self._buffer_lock = threading.Lock()
-        sqlite3 = self._sh.dbapi('sqlite')
         self.logger.debug("SQLite {0}".format(sqlite3.sqlite_version))
         self._fdb_lock = threading.Lock()
         self._fdb_lock.acquire()
@@ -107,8 +107,10 @@ class SQL(SmartPlugin):
         year = 365 * day
         self._frames = {'i': minute, 'h': hour, 'd': day, 'w': week, 'm': month, 'y': year}
         self._times = {'i': minute, 'h': hour, 'd': day, 'w': week, 'm': month, 'y': year}
-        smarthome.scheduler.add('SQLite pack', self._pack, cron='2 3 * *', prio=5)
-        smarthome.scheduler.add('SQLite dump', self._dump, cycle=self._dump_cycle, offset=20, prio=5)
+#        smarthome.scheduler.add('SQLite pack', self._pack, cron='2 3 * *', prio=5)
+#        smarthome.scheduler.add('SQLite dump', self._dump, cycle=self._dump_cycle, offset=20, prio=5)
+        self.scheduler_add('SQLite pack', self._pack, cron='2 3 * *', prio=5)
+        self.scheduler_add('SQLite dump', self._dump, cycle=self._dump_cycle, offset=20, prio=5)
 
     def parse_item(self, item):
         if 'history' in item.conf:  # XXX legacy history option remove sometime

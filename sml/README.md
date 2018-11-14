@@ -1,6 +1,6 @@
 # Sml
 
-# Requirements
+## Requirements
 
 To use this plugin for reading data from your smart power meter hardware
 you need to have a serial or network interface connected to your hardware.
@@ -19,19 +19,19 @@ The plugin was tested with the following hardware:
    * EHM eHZ-GW8 E2A 500 AL1
    * EHM eHZ-ED300L
 
-# Configuration
+## Configuration
 
-## plugin.conf
+### plugin.yaml
 
-<pre>
-[sml]
-  class_name = Sml
-  class_path = plugins.sml
-  serialport = /dev/ttyUSB0
-  # host = 192.168.2.1
-  # port = 1234
-  # device = raw | hex | <known-device>
-</pre>
+```
+sml:
+  class_name: Sml
+  class_path: plugins.sml
+  serialport: /dev/ttyUSB0
+  # host: 192.168.2.1
+  # port: 1234
+  # device: raw | hex | <known-device>
+```
 
 The plugin reads data from smart power meter hardware by using a serial
 interface (e.g. /dev/ttyUSB0) or by connecting to a host/port. It reads
@@ -74,7 +74,7 @@ are supported:
    * `smart-meter-gateway-com-1` - The Smart Meter Gateway COM-1
      http://shop.co-met.info/artikeldetails/kategorie/Smart-Metering/artikel/smart-meter-gateway-com-1.html
 
-## items.conf
+### items.yaml
 
 You can assign a value retrieved by the plugin to some of your items by
 using the OBIS identifier.
@@ -115,41 +115,49 @@ Additionally the following attributes will be calculated and also be provided:
 
 
 
-### sml_obis
+#### sml_obis
 
 This assigns the value for the given OBIS code to the item.
 
-e.g. sml_obis = 1-0:1.8.0*255
+```yaml
+sml_obis: 1-0:1.8.0*255
+```
 
-### sml_prop
+#### sml_prop
 
 Use this to assign other information for an OBIS code to the item. When not
 explicitely specified it defaults to `valueReal`.
 
-e.g. sml_prop = unitName
+```yaml
+sml_prop: unitName
+```
 
-### Example
+#### Example
 
 Here you can find a sample configuration:
 
-<pre>
-[power]
-  [[home]]
-    [[[total]]]
-      type = num
-      sml_obis = 1-0:1.8.0*255
-    [[[current]]]
-      type = num
-      sml_obis = 1-0:16.7.0*255
-      [[[unit]]]
-        type = num
-        sml_obis = 1-0:16.7.0*255
-        sml_prop = unitName
-</pre>
+```yaml
+power:
 
-## logic.conf
+    home:
+
+        total:
+            type: num
+            sml_obis: 1-0:1.8.0*255
+
+        current:
+            type: num
+            sml_obis: 1-0:16.7.0*255
+
+        unit:
+            type: num
+            sml_obis: 1-0:16.7.0*255
+            sml_prop: unitName
+```
+
+### logic.yaml
 Currently there is no logic configuration for this plugin.
 
 
-# Methodes
+## Methodes
 Currently there are no functions offered from this plugin.

@@ -1,31 +1,16 @@
-# homematic - Plugin
+# homematic  
 
-Requirements
-============
-Homematic Hardware Gateway
+## Requirements
+
+This plugin requires the Pyhton module **pyhomematic** to be installed.
 
 
-Configuration
-=============
+### Supported Hardware
 
-## plugin.conf
+This plugin supports the **HomeMatic CCU2**.
 
-<pre>
-[homematic]
-    class_name = Homematic
-    class_path = plugins.homematic
-    host = 192.168.50.250
-    port = 2001
-</pre>
 
-## items.conf
-<pre>
-    [[deckenlicht_sofa]]
-        name = Deckenlicht Sofa
-        visu = yes
-        type = bool
-        hm_address = JEQ0017982
-        hm_type = switch
-</pre>
+## Configuration
 
-#
+The configuration is explained in the plugin section of the user documentation. Look at [www.smarthomeNG.de/user](]https://www.smarthomeNG.de/user).
+

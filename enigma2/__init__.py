@@ -31,7 +31,7 @@ from requests.auth import HTTPBasicAuth
 from lib.model.smartplugin import SmartPlugin
 
 
-class Enigma2Device():
+class Enigma2Device:
     """
     This class encapsulates information related to a specific Enigma2Device, such has host, port, ssl, username, password, or related items
     """
@@ -124,7 +124,7 @@ class Enigma2(SmartPlugin):
     Main class of the Plugin. Does all plugin specific stuff and provides the update functions for the Enigma2Device
     """
     ALLOW_MULTIINSTANCE = True
-    PLUGIN_VERSION = "1.1.11"
+    PLUGIN_VERSION = "1.4.11"
 
     _url_suffix_map = dict([('about', '/web/about'),
                             ('deviceinfo', '/web/deviceinfo'),
@@ -183,8 +183,10 @@ class Enigma2(SmartPlugin):
         """
         Run method for the plugin
         """
-        self._sh.scheduler.add(__name__, self._update_loop, cycle=self._cycle)
-        self._sh.scheduler.add(__name__ + "_fast", self._update_loop_fast, cycle=self._fast_cycle)
+#        self._sh.scheduler.add(__name__, self._update_loop, cycle=self._cycle)
+#        self._sh.scheduler.add(__name__ + "_fast", self._update_loop_fast, cycle=self._fast_cycle)
+        self.scheduler_add('update', self._update_loop, cycle=self._cycle)
+        self.scheduler_add('update_fast', self._update_loop_fast, cycle=self._fast_cycle)
         self.alive = True
 
     def stop(self):
@@ -367,7 +369,28 @@ class Enigma2(SmartPlugin):
 
         :param value: value of the volume (int from 0 to 100)
         """
-        xml = self.box_request(self._url_suffix_map['vol'], 'set=set%s' % (value))
+        xml = self.box_request(self._url_suffix_map['vol'], 'set=set%s' % value)
+
+        e2result_xml = xml.getElementsByTagName('e2result')
+        e2resulttext_xml = xml.getElementsByTagName('e2resulttext')
+        if len(e2resulttext_xml) > 0 and len(e2result_xml) > 0:
+            if not e2resulttext_xml[0].firstChild is None and not e2result_xml[0].firstChild is None:
+                if e2result_xml[0].firstChild.data == 'True':
+                    self.logger.debug(e2resulttext_xml[0].firstChild.data)
+
+    def set_power_state(self, value):
+        """
+        Sets the power state to a specific value
+        0 = Toggle Standby
+        1 = Deepstandby
+        2 = Reboot
+        3 = Restart Enigma2
+        4 = Wakeup from Standby
+        5 = Standby
+
+        :param value: value of the power state (int from 0 to 5)
+        """
+        xml = self.box_request(self._url_suffix_map['powerstate'], 'newstate=%s' % value)
 
         e2result_xml = xml.getElementsByTagName('e2result')
         e2resulttext_xml = xml.getElementsByTagName('e2resulttext')
@@ -398,7 +421,7 @@ class Enigma2(SmartPlugin):
         """
         Retrieves the answer to a currently sent message, take care to take the timeout into account in which the answer can be given and start a thread which is polling the answer for that period.
         """
-        xml = self.box_request(self._url_suffix_map['message'], 'getanswer=now')
+        xml = self.box_request(self._url_suffix_map['messageanswer'], 'getanswer=now')
 
         e2result_xml = xml.getElementsByTagName('e2state')
         e2resulttext_xml = xml.getElementsByTagName('e2statetext')
